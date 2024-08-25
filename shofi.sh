@@ -5,11 +5,10 @@ desktop_files_dirs=(
     "$HOME/.local/share/applications"
     "/usr/share/applications"
     "/usr/local/share/applications"
-#    "/var/lib/flatpak/exports/share/applications/" Flatpak support is currently in the works
-
+    "/var/lib/flatpak/exports/share/applications"
 )
 
-# Config file location
+# config file location
 config_file="$HOME/.config/shofi/menus.conf"
 
 apps=()
@@ -75,13 +74,13 @@ display_menu() {
         fi
 
         if [ -n "$search_term" ]; then
-            filtered_apps=($(printf "%s\n" "${menu_apps[@]}" | grep -i "$search_term"))
+            filtered_apps=($(printf "%s\n" "${menu_apps[@]}" | grep -i "$search_term" | sed 's/:.*//'))
         else
-            filtered_apps=("${menu_apps[@]}")
+            filtered_apps=($(printf "%s\n" "${menu_apps[@]}" | sed 's/:.*//'))
         fi
 
         for i in "${!filtered_apps[@]}"; do
-            echo "$((i+1))) ${filtered_apps[$i]%%:*}"
+            echo "$((i+1))) ${filtered_apps[$i]}"
         done
 
         echo
@@ -99,8 +98,10 @@ display_menu() {
                 ;;
             [0-9]*)
                 if [[ "$user_input" =~ ^[0-9]+$ ]] && [ "$user_input" -le "${#filtered_apps[@]}" ] && [ "$user_input" -ge 1 ]; then
-                    selected_app="${filtered_apps[$((user_input-1))]%%:*}"
-                    launch_app "$selected_app" "$current_menu"
+                    selected_index=$((user_input-1))
+                    selected_name="${filtered_apps[$selected_index]}"
+                    exec_command=$(printf "%s\n" "${menu_apps[@]}" | grep "^${selected_name}:" | cut -d':' -f2-)
+                    launch_app "$exec_command"
                     break
                 fi
                 ;;
@@ -144,27 +145,13 @@ next_menu() {
 }
 
 launch_app() {
-    local selected_app="$1"
-    local current_menu="$2"
-    if [[ "$current_menu" == "Default" ]]; then
-        for app in "${apps[@]}"; do
-            if [[ "$app" == "$selected_app:"* ]]; then
-                exec_command="${app#*:}"
-                echo "Executing: $exec_command"
-                eval "$exec_command" &
-                break
-            fi
-        done
+    local exec_command="$1"
+
+    if [ -n "$exec_command" ]; then
+        echo "Executing: $exec_command"
+        eval "$exec_command" &
     else
-        eval "menu_apps=(\"\${${current_menu}_apps[@]}\")"
-        for app in "${menu_apps[@]}"; do
-            if [[ "$app" == "$selected_app:"* ]]; then
-                exec_command="${app#*:}"
-                echo "Executing: $exec_command"
-                eval "$exec_command" &
-                break
-            fi
-        done
+        echo "Error: Command not found."
     fi
 }
 
