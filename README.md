@@ -23,4 +23,4 @@ windowrulev2 = size 600 600, class:kitty, title:^(shofi)$    # Set fixed width (
 bind = $mainMod, L, exec, kitty --title shofi -e zsh -c "location/to/your/shofi.sh; exec zsh"
 ```
 If you've used ezsh to set up the script, you can just just ```shofi``` instead of ```location/to/your/shofi.sh```
-Make sure to change ```kitty``` to whatever terminal you want to use.
+Make sure to change ```kitty``` to whatever terminal you want to use (note, cool-retro-term does not work with the --title command)
