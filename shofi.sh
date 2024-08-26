@@ -19,11 +19,9 @@ load_custom_menus() {
         local menu_name=""
         while IFS= read -r line; do
             line=$(echo "$line" | sed 's/^[ \t]*//;s/[ \t]*$//')
-
             if [ -z "$line" ] || [[ "$line" =~ ^# ]]; then
                 continue
             fi
-
             if [[ "$line" =~ ^\[(.*)\]$ ]]; then
                 menu_name="${BASH_REMATCH[1]}"
                 custom_menus+=("$menu_name")
@@ -42,11 +40,10 @@ parse_desktop_files() {
         if [ -d "$dir" ]; then
             for desktop_file in "$dir"/*.desktop; do
                 if [ -f "$desktop_file" ]; then
-                    name=$(grep -m 1 '^Name=' "$desktop_file" | cut -d'=' -f2)
+                    name=$(grep -m 1 '^Name=' "$desktop_file" | cut -d'=' -f2-)
+                    name=$(echo "$name" | sed 's/ /-/g')  # Replace spaces with hyphens
                     exec_command=$(grep -m 1 '^Exec=' "$desktop_file" | cut -d'=' -f2-)
-
                     exec_command=$(echo "$exec_command" | sed 's/ *%[UuFfNn]//g')
-
                     if [ -n "$name" ] && [ -n "$exec_command" ]; then
                         apps+=("$name:$exec_command")
                     fi
@@ -74,9 +71,9 @@ display_menu() {
         fi
 
         if [ -n "$search_term" ]; then
-            filtered_apps=($(printf "%s\n" "${menu_apps[@]}" | grep -i "$search_term" | sed 's/:.*//'))
+            filtered_apps=($(printf "%s\n" "${menu_apps[@]}" | grep -i "$search_term" | awk -F ':' '{print $1}'))
         else
-            filtered_apps=($(printf "%s\n" "${menu_apps[@]}" | sed 's/:.*//'))
+            filtered_apps=($(printf "%s\n" "${menu_apps[@]}" | awk -F ':' '{print $1}'))
         fi
 
         for i in "${!filtered_apps[@]}"; do
@@ -85,30 +82,17 @@ display_menu() {
 
         echo
         echo "Type to search or enter the number of the application: "
-        read -rsn1 user_input
+        read -r user_input
 
-        case "$user_input" in
-            $'\x1b')
-                read -rsn2 -t 0.1 key
-                if [[ "$key" == "[D" ]]; then
-                    current_menu=$(previous_menu "$current_menu")
-                elif [[ "$key" == "[C" ]]; then
-                    current_menu=$(next_menu "$current_menu")
-                fi
-                ;;
-            [0-9]*)
-                if [[ "$user_input" =~ ^[0-9]+$ ]] && [ "$user_input" -le "${#filtered_apps[@]}" ] && [ "$user_input" -ge 1 ]; then
-                    selected_index=$((user_input-1))
-                    selected_name="${filtered_apps[$selected_index]}"
-                    exec_command=$(printf "%s\n" "${menu_apps[@]}" | grep "^${selected_name}:" | cut -d':' -f2-)
-                    launch_app "$exec_command"
-                    break
-                fi
-                ;;
-            *)
-                search_term+="$user_input"
-                ;;
-        esac
+        if [[ "$user_input" =~ ^[0-9]+$ ]] && [ "$user_input" -le "${#filtered_apps[@]}" ] && [ "$user_input" -ge 1 ]; then
+            selected_index=$((user_input-1))
+            selected_name="${filtered_apps[$selected_index]}"
+            exec_command=$(printf "%s\n" "${menu_apps[@]}" | grep "^${selected_name}:" | awk -F ':' '{print $2}')
+            launch_app "$exec_command"
+            break
+        elif [[ -n "$user_input" ]]; then
+            search_term="$user_input"
+        fi
     done
 }
 
