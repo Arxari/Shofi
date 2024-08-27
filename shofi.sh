@@ -133,10 +133,17 @@ launch_app() {
 
     if [ -n "$exec_command" ]; then
         echo "Executing: $exec_command"
-        eval "$exec_command" &
+        setsid $exec_command >/dev/null 2>&1 &
+        disown
+        exit_script
     else
         echo "Error: Command not found."
     fi
+}
+
+exit_script() {
+    exit 0
+    exec $SHELL -c "exit"
 }
 
 load_custom_menus
