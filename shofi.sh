@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+
 # .desktop directories
 desktop_files_dirs=(
     "$HOME/.local/share/applications"
@@ -13,6 +15,15 @@ config_file="$HOME/.config/shofi/menus.conf"
 
 # cache file location
 cache_file="$HOME/.cache/shofi/cache.txt"
+
+# oo prettyh (color fe)
+GREEN="\033[0;32m"
+YELLOW="\033[1;33m"
+BLUE="\033[1;34m"
+RED="\033[0;31m"
+CYAN="\033[0;36m"
+BOLD="\033[1m"
+RESET="\033[0m"
 
 apps=()
 custom_menus=()
@@ -105,10 +116,10 @@ display_menu() {
 
     while true; do
         clear
-        echo "Current ${mode^}: $current_menu"
-        echo "-------------------------------------------"
-        echo "Use Up/Down arrows to select apps. Left/Right arrows to switch ${mode}s."
-        echo "Type to search. Press Enter to launch."
+        echo -e "${BLUE}${BOLD}Current ${mode^}: $current_menu${RESET}"
+        echo -e "${CYAN}-------------------------------------------${RESET}"
+        echo -e "${YELLOW}Use Up/Down arrows to select apps. Left/Right arrows to switch ${mode}s.${RESET}"
+        echo -e "${YELLOW}Type to search. Press Enter to launch.${RESET}"
         echo
 
         if [[ "$mode" == "menu" ]]; then
@@ -126,7 +137,7 @@ display_menu() {
 
             for i in "${!filtered_apps[@]}"; do
                 if [ $i -eq $selected_index ]; then
-                    echo "> $((i+1))) ${filtered_apps[$i]}"
+                    echo -e "${GREEN}> $((i+1))) ${filtered_apps[$i]}${RESET}"
                 else
                     echo "  $((i+1))) ${filtered_apps[$i]}"
                 fi
@@ -140,7 +151,7 @@ display_menu() {
             fi
             for i in "${!filtered_list_apps[@]}"; do
                 if [ $i -eq $selected_index ]; then
-                    echo "> $((i+1))) ${filtered_list_apps[$i]}"
+                    echo -e "${GREEN}> $((i+1))) ${filtered_list_apps[$i]}${RESET}"
                 else
                     echo "  $((i+1))) ${filtered_list_apps[$i]}"
                 fi
@@ -148,8 +159,8 @@ display_menu() {
         fi
 
         echo
-        echo "Search: $search_term"
-        echo "Use arrow keys to navigate, type to search, or press Enter to launch."
+        echo -e "${CYAN}Search: $search_term${RESET}"
+        echo -e "${YELLOW}Use arrow keys to navigate, type to search, or press Enter to launch.${RESET}"
         read -rsn1 key
 
         case "$key" in
@@ -289,12 +300,12 @@ launch_app() {
     local exec_command="$1"
 
     if [ -n "$exec_command" ]; then
-        echo "Executing: $exec_command"
+        echo -e "${GREEN}Executing: $exec_command${RESET}"
         setsid $exec_command >/dev/null 2>&1 &
         disown
         exit_script
     else
-        echo "Error: Command not found."
+        echo -e "${RED}Error: Command not found.${RESET}"
     fi
 }
 
@@ -308,7 +319,7 @@ load_custom_lists
 parse_desktop_files
 
 if [ ${#apps[@]} -eq 0 ] && [ ${#custom_menus[@]} -eq 0 ] && [ ${#custom_lists[@]} -eq 0 ]; then
-    echo "No applications found."
+    echo -e "${RED}No applications found.${RESET}"
     exit 1
 else
     current_menu="Default"
