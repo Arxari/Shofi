@@ -13,8 +13,9 @@ Convert-images=Switcheroo
 Dither-images=halftone
 ```
 
-### Pro Tip
-Use [ezsh](https://github.com/AAATBSGSHU/ezsh) to make setting up and using this script easier.
+<details closed>
+<summary>Do you want to use shofi as a popup window?</summary>
+
 If you are using Hyprland, you can setup your Hyprland.conf like this:
 ```
 # Shofi
@@ -24,3 +25,5 @@ bind = $mainMod, L, exec, kitty --title shofi -e zsh -c "location/to/your/shofi.
 ```
 If you've used ezsh to set up the script, you can just just ```shofi``` instead of ```location/to/your/shofi.sh```
 Make sure to change ```kitty``` to whatever terminal you want to use (note, cool-retro-term does not work with the --title command)
+
+</details closed>
