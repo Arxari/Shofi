@@ -1,6 +1,12 @@
 # Shofi
 Wofi/Rofi but it's in Shell
 
+#### Features!
+- Runs in your terminal, no need for GUIs
+- Customizable app menus/lists
+- Supports both Wayland and X11*
+###### *as long as your terminal does
+
 #### Example config
 ```
 [Apps]
