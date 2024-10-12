@@ -7,7 +7,8 @@ Wofi/Rofi but it's in Shell
 - Supports both Wayland and X11*
 ###### *as long as your terminal does
 
-#### Example config ###### (~/.config/shofi/menus.conf by default)
+#### Example config
+###### (~/.config/shofi/menus.conf by default)
 ```
 [Apps]
 Firefox=firefox
