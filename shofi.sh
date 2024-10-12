@@ -9,7 +9,10 @@ desktop_files_dirs=(
 )
 
 # config file location
-config_file="$HOME/.config/shofi/menus.conf" # note to other devs: see how easy it is to respect XDG?
+config_file="$HOME/.config/shofi/menus.conf"
+
+# cache file location
+cache_file="$HOME/.cache/shofi/cache.txt"
 
 apps=()
 custom_menus=()
@@ -57,21 +60,41 @@ load_custom_lists() {
 }
 
 parse_desktop_files() {
+    local cache_is_valid=true
     for dir in "${desktop_files_dirs[@]}"; do
         if [ -d "$dir" ]; then
             for desktop_file in "$dir"/*.desktop; do
-                if [ -f "$desktop_file" ]; then
-                    name=$(grep -m 1 '^Name=' "$desktop_file" | cut -d'=' -f2-)
-                    name=$(echo "$name" | sed 's/ /-/g')
-                    exec_command=$(grep -m 1 '^Exec=' "$desktop_file" | cut -d'=' -f2-)
-                    exec_command=$(echo "$exec_command" | sed 's/ *%[UuFfNn]//g')
-                    if [ -n "$name" ] && [ -n "$exec_command" ]; then
-                        apps+=("$name:$exec_command")
-                    fi
+                if [ -f "$desktop_file" ] && [ "$desktop_file" -nt "$cache_file" ]; then
+                    cache_is_valid=false
+                    break 2
                 fi
             done
         fi
     done
+
+    if [ "$cache_is_valid" = true ] && [ -f "$cache_file" ]; then
+        mapfile -t apps < "$cache_file"
+    else
+        apps=()
+        for dir in "${desktop_files_dirs[@]}"; do
+            if [ -d "$dir" ]; then
+                for desktop_file in "$dir"/*.desktop; do
+                    if [ -f "$desktop_file" ]; then
+                        name=$(grep -m 1 '^Name=' "$desktop_file" | cut -d'=' -f2-)
+                        name=$(echo "$name" | sed 's/ /-/g')
+                        exec_command=$(grep -m 1 '^Exec=' "$desktop_file" | cut -d'=' -f2-)
+                        exec_command=$(echo "$exec_command" | sed 's/ *%[UuFfNn]//g')
+                        if [ -n "$name" ] && [ -n "$exec_command" ]; then
+                            apps+=("$name:$exec_command")
+                        fi
+                    fi
+                done
+            fi
+        done
+
+        mkdir -p "$(dirname "$cache_file")"
+        printf "%s\n" "${apps[@]}" > "$cache_file"
+    fi
 }
 
 display_menu() {
