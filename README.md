@@ -14,7 +14,7 @@ Dither-images=halftone
 ```
 
 ### Pro Tip
-Use [ezsh](https://github.com/AAATBSGSHU/ezsh) to make setting up and usingthis script easier.
+Use [ezsh](https://github.com/AAATBSGSHU/ezsh) to make setting up and using this script easier.
 If you are using Hyprland, you can setup your Hyprland.conf like this:
 ```
 # Shofi
