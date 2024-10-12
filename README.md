@@ -5,6 +5,7 @@ Wofi/Rofi but it's in Shell
 - Runs in your terminal, no need for GUIs
 - Customizable app menus/lists
 - Supports both Wayland and X11*
+- Configuration and cache files respect XDG Base Directory Specifications
 ###### *as long as your terminal does
 
 #### Example config
