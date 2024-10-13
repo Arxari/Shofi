@@ -26,6 +26,18 @@ Currently the menus work by just executing the thing behind =, this means that f
 ###### I won't support snaps in the script, if you want snap support you need to edit the script yourself locally to add support (I won't accept PRs adding snap support)
 
 <details closed>
+<summary>How to install</summary>
+Git clone the repo
+```git clone https://github.com/Arxari/Shofi.git```
+Make the shell script executable
+```chmod +x location/to/your/shofi.sh```
+If you want to make your life easy it, add it to your .bashrc/.zshrc
+```alias shofi='location/to/your/shofi.sh```
+
+</details closed>
+
+
+<details closed>
 <summary>Do you want to use shofi as a popup window?</summary>
 
 If you are using Hyprland, you can setup your Hyprland.conf like this:
