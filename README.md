@@ -26,6 +26,7 @@ Currently the menus work by just executing the thing behind =, this means that f
 ###### I won't support snaps in the script, if you want snap support you need to edit the script yourself locally to add support (I won't accept PRs adding snap support)
 
 <details closed>
+
 <summary>How to install</summary>
 Git clone the repo
 ```git clone https://github.com/Arxari/Shofi.git```
