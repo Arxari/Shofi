@@ -12,14 +12,16 @@ Wofi/Rofi but it's in Shell
 ###### (~/.config/shofi/menus.conf by default)
 ```
 [Apps]
-Firefox=firefox
-VSCode=code
-Terminal=kitty
+[Apps]
+Zen-browser=zen-browser
+Zed=zeditor
+Terminal=alacritty
 
 [Utils]
-Convert-images=Switcheroo
-Dither-images=Halftone
+Convert-images=flatpak run io.gitlab.adhami3310.Converter
+Dither-images=flatpak run halftone io.github.tfuxu.Halftone
 ```
+Currently the menus work by just executing the thing behind =, this means that for pacman/aur apps you need to use the same name you'd use to execute it from the terminal and for flatpak apps you need to use flatpak run
 
 <details closed>
 <summary>Do you want to use shofi as a popup window?</summary>
