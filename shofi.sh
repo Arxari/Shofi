@@ -40,10 +40,10 @@ load_custom_menus() {
 
         if [[ "$line" =~ ^\[(.*)\]$ ]]; then
             menu_name="${BASH_REMATCH[1]}"
-            custom_menus["$menu_name"]=()
+            custom_menus["$menu_name"]=""
         elif [[ "$line" == *=* ]]; then
             IFS='=' read -r app_name app_command <<< "$line"
-            custom_menus["$menu_name"]+="$app_name:$app_command"$'\n'
+            custom_menus["$menu_name"]+="${app_name}:${app_command}"$'\n'
         fi
     done < "$config_file"
 }
