@@ -23,7 +23,7 @@ Dither-images=flatpak run halftone io.github.tfuxu.Halftone
 ```
 Currently the menus work by just executing the thing behind =, this means that for pacman/aur apps you need to use the same name you'd use to execute it from the terminal and for flatpak apps you need to use flatpak run
 
-###### I won't support snaps in the script, if you want snap support you need to edit the script yourself to the script locally (I won't accept PRs adding snap support)
+###### I won't support snaps in the script, if you want snap support you need to edit the script yourself locally to add support (I won't accept PRs adding snap support)
 
 <details closed>
 <summary>Do you want to use shofi as a popup window?</summary>
