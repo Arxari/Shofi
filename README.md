@@ -29,11 +29,11 @@ Currently the menus work by just executing the thing behind =, this means that f
 
 <summary>How to install</summary>
 
-Git clone the repo
+- Git clone the repo
 ```git clone https://github.com/Arxari/Shofi.git```
-Make the shell script executable
+- Make the shell script executable
 ```chmod +x location/to/your/shofi.sh```
-If you want to make your life easy it, add it to your .bashrc/.zshrc
+- If you want to make your life easy it, add it to your .bashrc/.zshrc
 ```alias shofi='location/to/your/shofi.sh```
 
 </details closed>
