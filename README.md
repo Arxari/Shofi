@@ -28,6 +28,7 @@ Currently the menus work by just executing the thing behind =, this means that f
 <details closed>
 
 <summary>How to install</summary>
+
 Git clone the repo
 ```git clone https://github.com/Arxari/Shofi.git```
 Make the shell script executable
