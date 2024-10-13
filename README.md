@@ -18,7 +18,7 @@ Terminal=kitty
 
 [Utils]
 Convert-images=Switcheroo
-Dither-images=halftone
+Dither-images=Halftone
 ```
 
 <details closed>
